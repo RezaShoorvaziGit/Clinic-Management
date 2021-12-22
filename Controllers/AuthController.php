@@ -3,20 +3,25 @@
 namespace App\Controllers;
 
 use App\Core\View;
+use App\Models\Admin;
 use App\Models\User;
 
-class AuthController {
+class AuthController
+{
 
-    public function showRegister() {
+    public function showRegister()
+    {
         View::render('register');
     }
 
-    public function showLogin() {
+    public function showLogin()
+    {
         View::render('login');
     }
 
-    public function register() {
-        User::do()->create([
+    public function register()
+    {
+        Admin::do()->create([
             'name' => $_POST['name'],
             'username' => $_POST['username'],
             'password' => md5($_POST['password']),
@@ -25,19 +30,37 @@ class AuthController {
         echo 'user registered successfully';
     }
 
-    public function login() {
-        $user = User::do()->find($_POST['username']);
-        if (count($user)) {
-            $user = $user[0];
+    public function login()
+    {
+        $username = $_POST['username'];
+        $password = md5($_POST['password']);
 
-            if ($user->password == md5($_POST['password'])) {
-                echo "you are loged in";
-            } else {
-                echo "your password is wrong";
-            }
+        $result = Admin::do()->find($username, 'username');
 
-        } else {
-            echo "username not found";
+
+        // var_dump($result);
+        if ($result == null) {
+            header("location: login");
+            exit();
         }
+
+        if ($result->password == $password) {
+            createCookie('user_id', $result->id);
+            createCookie('user_name', $result->name);
+            header("location: home");
+        } else {
+            header("location: /MVC/MVC");
+        }
+    }
+
+
+
+    public function logout()
+    {
+
+        destroyCookie('user_id');
+        destroyCookie('user_name');
+
+        header('Location: login');
     }
 }

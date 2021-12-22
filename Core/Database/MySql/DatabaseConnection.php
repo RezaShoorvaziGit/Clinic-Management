@@ -11,9 +11,9 @@ class DatabaseConnection implements DatabaseConnectionInterface {
 
     private function __construct() {
         $serverName = '127.0.0.1';
-        $dbName = 'mvc';
+        $dbName = 'clinic_management';
 
-        $this->connectionInstance = new \PDO("mysql:host=$serverName;dbname=$dbName", 'root', '13801019');
+        $this->connectionInstance = new \PDO("mysql:host=$serverName;dbname=$dbName", 'root', '123456789');
     }
 
     public static function getInstance() {

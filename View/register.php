@@ -4,7 +4,7 @@
     Register
 </h1>
 
-<form method="POST">
+<form method="POST" class="bg-dar">
     <input type="text" placeholder="name" name="name" required>
     <input type="text" placeholder="username" name="username" required>
     <input type="text" placeholder="password" name="password" required>

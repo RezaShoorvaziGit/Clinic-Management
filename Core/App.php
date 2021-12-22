@@ -4,15 +4,19 @@ namespace App\Core;
 
 class App {
     private $router;
+    public static $ROOTDIR;
 
     public function __construct() {
         $this->router = new Routes();
+        self::$ROOTDIR = dirname(__DIR__) . '/';
     }
-
     public function run() {
-        $callback = $this->router->findRoute(strtolower($_SERVER['REQUEST_METHOD']), $_SERVER['REQUEST_URI']);
+        $callback = $this->router->findRoute(strtolower($_SERVER['REQUEST_METHOD']), $this->removeQuery($_SERVER['REQUEST_URI']));
         if (is_null($callback)) {
             echo "a beautiful 404 page";
+            // echo "<pre>" ;
+            // print_r($_SERVER) ;
+            // echo "</pre>" ;
             exit();
         }
 
@@ -29,5 +33,17 @@ class App {
 
     public function post(string $path, $callback) {
         $this->router->addRoute('post', $path, $callback);
+    }
+
+
+    public function removeQuery(string $uri){
+        $position = strpos($uri,"?") ;
+
+
+        if($position===false)
+            return $uri ;
+
+        return substr($uri,0,$position) ;
+
     }
 }
